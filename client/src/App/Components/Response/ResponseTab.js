@@ -1,5 +1,5 @@
 import React from "react";
-import formService from "../../services/formService";
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,6 +8,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import { FormActions } from "../../Actions";
 
 const useStyles = makeStyles({
   table: {
@@ -17,13 +18,25 @@ const useStyles = makeStyles({
 
 function ResponseTab(props) {
   const classes = useStyles();
-
+  const { resData } = props;
   // eslint-disable-next-line no-unused-vars
   const [formData, setFormData] = React.useState({});
   const [responseData, setResponseData] = React.useState([]);
   const [questions, setQuestions] = React.useState([]);
+  const mounted = React.useRef();
 
   React.useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+    } else {
+      if (resData) {
+        console.log("formUserDadasdasta", resData);
+        setResponseData(resData);
+      }
+    }
+  }, [resData]);
+
+  React.useEffect(async () => {
     if (props.formData) {
       setQuestions(props.formData.questions);
 
@@ -31,20 +44,7 @@ function ResponseTab(props) {
     }
     const formId = props.formId;
     if (formId !== undefined && formId !== "") {
-      formService.getResponse(formId).then(
-        (data) => {
-          setResponseData(data);
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          console.log(resMessage);
-        }
-      );
+      await props.getResponse(formId);
     }
   }, [props.formId, props.formData]);
 
@@ -107,4 +107,14 @@ function ResponseTab(props) {
   );
 }
 
-export default ResponseTab;
+const mapStateToProps = ({ Forms }) => {
+  return {
+    resData: Forms.resData,
+  };
+};
+
+const mapStateToDispatch = {
+  getResponse: FormActions.getResponse,
+};
+
+export default connect(mapStateToProps, mapStateToDispatch)(ResponseTab);

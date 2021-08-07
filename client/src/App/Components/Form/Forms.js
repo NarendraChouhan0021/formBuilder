@@ -1,5 +1,4 @@
 import React from "react";
-import formService from "../../services/formService";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -8,6 +7,8 @@ import OneForm from "./OneForm";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { connect } from "react-redux";
 import jwtDecode from "jwt-decode";
+import { FormActions } from "../../Actions";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
@@ -34,28 +35,19 @@ function Forms(props) {
     setUser(jwtDecode(UserProfileDetails.accessToken));
   }, [UserProfileDetails]);
 
-  React.useEffect(() => {
-    if (props.userId === undefined) {
-      // console.log("this userId is undefined");
-    } else {
-      formService.getForms(props.userId).then(
-        (forms2) => {
-          setForms(forms2);
-          setLoadingForms(false);
-        },
-
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          console.log(resMessage);
-        }
-      );
-    }
-  }, [props.userId]);
+  React.useEffect(
+    async () => {
+      if (props.userId === undefined) {
+        // console.log("this userId is undefined");
+      } else {
+        await props.getForms(props.userId);
+        setForms(props.forms);
+        setLoadingForms(false);
+      }
+    },
+    [props.userId],
+    [props.forms]
+  );
 
   return (
     <div>
@@ -72,12 +64,15 @@ function Forms(props) {
   );
 }
 
-const mapStateToProps = ({ UserProfileDetails }) => {
+const mapStateToProps = ({ UserProfileDetails, Forms }) => {
   return {
     UserProfileDetails,
+    forms: Forms.forms,
   };
 };
 
-const mapStateToDispatch = {};
+const mapStateToDispatch = {
+  getForms: FormActions.getForms,
+};
 
 export default connect(mapStateToProps, mapStateToDispatch)(Forms);

@@ -21,14 +21,11 @@ import FilterNoneIcon from "@material-ui/icons/FilterNone";
 import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-
+import { FormActions } from "../../Actions";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
-
 import ViewListIcon from "@material-ui/icons/ViewList";
-
 import QuestionsTab from "./QuestionsTab";
 import ResponseTab from "../Response/ResponseTab";
-import formService from "../../services/formService";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EditForm(props) {
-  const { UserProfileDetails } = props;
+  const { UserProfileDetails, editform } = props;
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
@@ -66,10 +63,22 @@ function EditForm(props) {
 
   const [formDeatils, setFormDetails] = React.useState({});
   const [openOfAlert, setOpenOfAlert] = React.useState(false);
+  const mounted = React.useRef();
 
   React.useEffect(() => {
     setUser(jwtDecode(UserProfileDetails.accessToken));
   }, [UserProfileDetails]);
+
+  React.useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+    } else {
+      if (editform) {
+        console.log("editform", editform);
+        setFormDetails(editform);
+      }
+    }
+  }, [editform]);
 
   const clipToClipboard = () => {
     navigator.clipboard.writeText(
@@ -107,25 +116,12 @@ function EditForm(props) {
     setOpen(false);
   };
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     const formId = props.match.params.formId;
     if (formId !== undefined) {
       setFormID(formId);
-      formService.getForm(formId).then(
-        (data) => {
-          // console.log(data);
-          setFormDetails(data);
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          console.log(resMessage);
-        }
-      );
+      await props.getForm(formId);
+      return () => {};
     }
   }, [props.match.params.formId]);
 
@@ -289,12 +285,15 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
-const mapStateToProps = ({ UserProfileDetails }) => {
+const mapStateToProps = ({ UserProfileDetails, Forms }) => {
   return {
     UserProfileDetails,
+    editform: Forms.editform,
   };
 };
 
-const mapStateToDispatch = {};
+const mapStateToDispatch = {
+  getForm: FormActions.getForm,
+};
 
 export default connect(mapStateToProps, mapStateToDispatch)(EditForm);

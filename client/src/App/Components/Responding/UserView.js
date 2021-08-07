@@ -1,6 +1,5 @@
 import React from "react";
 import { Paper, Typography, Grid } from "@material-ui/core";
-import formService from "../../services/formService";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import AppBar from "@material-ui/core/AppBar";
@@ -13,9 +12,9 @@ import Divider from "@material-ui/core/Divider";
 import { connect } from "react-redux";
 import jwtDecode from "jwt-decode";
 import auth from "../../services/authService";
-
+import { FormActions } from "../../Actions";
 function UserView(props) {
-  const { UserProfileDetails } = props;
+  const { UserProfileDetails, editform, submitRes } = props;
   console.log("allllllllllllllllllllllllllll");
   const [userId, setUserId] = React.useState("");
   const [formData, setFormData] = React.useState({});
@@ -62,54 +61,40 @@ function UserView(props) {
       setResponseData(fakeRData);
     }
   };
+  const mounted = React.useRef();
 
-  React.useEffect(() => {
+  React.useEffect(
+    () => {
+      if (!mounted.current) {
+        mounted.current = true;
+      } else {
+        if (editform) {
+          console.log("formUserDadasdasta", editform);
+          setFormData(editform);
+          setQuestions(editform.questions);
+        }
+      }
+    },
+    [editform],
+    [submitRes]
+  );
+
+  React.useEffect(async () => {
     const formId = props.match.params.formId;
     console.log(formId);
-
-    formService.getForm(formId).then(
-      (data) => {
-        console.log(data);
-
-        setFormData(data);
-        setQuestions(data.questions);
-      },
-      (error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        console.log(resMessage);
-      }
-    );
+    await props.getForm(formId);
   }, [props.match.params.formId]);
 
-  function submitResponse() {
+  const submitResponse = async () => {
     const submissionData = {
       formId: formData._id,
       userId: userId,
       response: responseData,
     };
-    console.log(submissionData);
-
-    formService.submitResponse(submissionData).then(
-      (data2) => {
-        setIsSubmitted(true);
-        console.log(data2);
-      },
-      (error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        console.log(resMessage);
-      }
-    );
-  }
+    console.log("submissionData", submissionData);
+    await props.submitResponse(submissionData);
+    setIsSubmitted(true);
+  };
 
   function reloadForAnotherResponse() {
     window.location.reload(true);
@@ -294,14 +279,17 @@ function UserView(props) {
   );
 }
 
-const mapStateToProps = ({ UserProfileDetails }) => {
+const mapStateToProps = ({ UserProfileDetails, Forms }) => {
   return {
     UserProfileDetails,
+    editform: Forms.editform,
+    submitRes: Forms.submitRes,
   };
 };
 
 const mapStateToDispatch = {
-  // loginWithGoogle: UserProfileActions.loginWithGoogle,
+  getForm: FormActions.getForm,
+  submitResponse: FormActions.submitResponse,
 };
 
 export default connect(mapStateToProps, mapStateToDispatch)(UserView);

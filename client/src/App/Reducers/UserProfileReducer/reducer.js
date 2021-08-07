@@ -7,10 +7,6 @@ const UserReducer = (state = {}, action) => {
         ...state,
         ...action.payload,
       };
-    case t.LOGOUT_USER: {
-      const emptyObj = {};
-      return emptyObj;
-    }
     default:
       return state;
   }

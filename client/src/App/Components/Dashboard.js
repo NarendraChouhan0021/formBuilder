@@ -20,8 +20,8 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import formService from "../services/formService";
 import jwtDecode from "jwt-decode";
+import { FormActions } from "../Actions";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Dashboard(props) {
-  const { UserProfileDetails } = props;
+  const { UserProfileDetails, formCreate } = props;
   const history = useHistory();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -97,6 +97,19 @@ function Dashboard(props) {
 
   const [formTitle, setFormTitle] = React.useState("");
   const [formDescription, setFormDescription] = React.useState("");
+
+  const mounted = React.useRef();
+
+  React.useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+    } else {
+      if (formCreate) {
+        console.log("formCreate", formCreate);
+        history.push("/form/" + formCreate._id);
+      }
+    }
+  }, [formCreate]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -109,7 +122,6 @@ function Dashboard(props) {
   const [user, setUser] = React.useState({});
 
   React.useEffect(() => {
-    console.log("UserProfileDetails", UserProfileDetails);
     setUser(jwtDecode(UserProfileDetails.accessToken));
   }, [UserProfileDetails]);
 
@@ -131,32 +143,16 @@ function Dashboard(props) {
     setFormDescription("");
   };
 
-  const createForm = () => {
+  const createForm = async () => {
     const data = {
       name: formTitle,
       description: formDescription,
       createdBy: user.id,
     };
     if (data.name !== "") {
-      formService.createForm(data).then(
-        (result) => {
-          console.log(result);
-          history.push("/form/" + result._id);
-        },
-
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          console.log(resMessage);
-        }
-      );
+      await props.createNewForm(data);
     }
   };
-
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
@@ -325,12 +321,15 @@ function Dashboard(props) {
   );
 }
 
-const mapStateToProps = ({ UserProfileDetails }) => {
+const mapStateToProps = ({ UserProfileDetails, Forms }) => {
   return {
     UserProfileDetails,
+    formCreate: Forms.formCreate,
   };
 };
 
-const mapStateToDispatch = {};
+const mapStateToDispatch = {
+  createNewForm: FormActions.createNewForm,
+};
 
 export default connect(mapStateToProps, mapStateToDispatch)(Dashboard);
