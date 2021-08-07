@@ -6,12 +6,12 @@ Its a basic google form builder created in react and redux and node.js
 
 # client side
 
-cd client
-yarn
+cd client ->
+yarn ->
 yarn run start
 
 # server side
 
-cd server
-npm i
+cd server ->
+npm i ->
 nodemon
