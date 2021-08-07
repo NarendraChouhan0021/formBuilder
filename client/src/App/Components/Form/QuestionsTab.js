@@ -1,7 +1,5 @@
 import React from "react";
-// import { Grid } from "@material-ui/core";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
 import { Paper, Typography, Grid } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import Accordion from "@material-ui/core/Accordion";
@@ -11,8 +9,6 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Radio from "@material-ui/core/Radio";
-// import Checkbox from "@material-ui/core/Checkbox";
-
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import AccordionActions from "@material-ui/core/AccordionActions";
 import Divider from "@material-ui/core/Divider";
@@ -28,10 +24,6 @@ import SaveIcon from "@material-ui/icons/Save";
 
 function QuestionsTab(props) {
   const [questions, setQuestions] = React.useState([]);
-  // const [imageContextData, setImageContextData] = React.useState({
-  //   question: null,
-  //   option: null,
-  // });
   const [formData, setFormData] = React.useState({});
   const [loadingFormData, setLoadingFormData] = React.useState(true);
 
@@ -79,24 +71,6 @@ function QuestionsTab(props) {
       }
     );
   }
-
-  // function checkImageHereOrNotForQuestion(gg) {
-  //   // console.log(gg);
-  //   if (gg === undefined || gg === "") {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // }
-
-  // function checkImageHereOrNotForOption(gg) {
-  //   // console.log(gg);
-  //   if (gg === undefined || gg === "") {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // }
 
   function addMoreQuestionField() {
     expandCloseAll(); // I AM GOD

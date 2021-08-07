@@ -1,11 +1,6 @@
 import React from "react";
-
-// import {Grid} from '@material-ui/core';
-
 import { Paper, Typography, Grid } from "@material-ui/core";
-
 import formService from "../../services/formService";
-// import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import AppBar from "@material-ui/core/AppBar";
@@ -15,30 +10,20 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Divider from "@material-ui/core/Divider";
-// import { makeStyles } from "@material-ui/core/styles";
-// import Container from '@material-ui/core/Container';
 import { connect } from "react-redux";
 import jwtDecode from "jwt-decode";
-
 import auth from "../../services/authService";
 
-// const useStyles = makeStyles((theme) => ({}));
-
 function UserView(props) {
-  // const classes = useStyles();
   const { UserProfileDetails } = props;
   console.log("allllllllllllllllllllllllllll");
   const [userId, setUserId] = React.useState("");
   const [formData, setFormData] = React.useState({});
   const [responseData, setResponseData] = React.useState([]);
-  // console.log(responseData);
-
-  // const [optionValue, setOptionValue] = React.useState([]);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
-
   const [questions, setQuestions] = React.useState([]);
   const [value, setValue] = React.useState("");
-  // console.log(value);
+
   React.useEffect(() => {
     if (auth.isAuthenticated()) {
       const userr = jwtDecode(UserProfileDetails.accessToken);
@@ -58,17 +43,10 @@ function UserView(props) {
     const questionId = questions[i]._id;
     const optionId = questions[i].options[j]._id;
 
-    // const fakeData = {
-    //   question: i,
-    //   option: j,
-    // };
     const data = {
       questionId,
       optionId,
     };
-    //  console.log(data);
-    // console.log(fakeData);
-    // console.log(j);
 
     setValue(j);
 
@@ -83,9 +61,6 @@ function UserView(props) {
       fakeRData[indexOfResponse].questionId = questionId;
       setResponseData(fakeRData);
     }
-
-    // setOptionValue(fakeData);
-    //
   };
 
   React.useEffect(() => {
@@ -314,14 +289,10 @@ function UserView(props) {
             )}
           </Grid>
         </Grid>
-
-        {/* //TODO: Add a footer here */}
       </div>
     </div>
   );
 }
-
-// export default UserView;
 
 const mapStateToProps = ({ UserProfileDetails }) => {
   return {

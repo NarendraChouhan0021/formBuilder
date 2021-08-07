@@ -33,7 +33,6 @@ function ResponseTab(props) {
     if (formId !== undefined && formId !== "") {
       formService.getResponse(formId).then(
         (data) => {
-          //      console.log(data);
           setResponseData(data);
         },
         (error) => {
@@ -51,8 +50,6 @@ function ResponseTab(props) {
 
   function getSelectedOption(qId, i, j) {
     const oneResData = responseData[j];
-    // console.log(oneResData);
-
     const selectedOp = oneResData.response.filter(
       (qss) => qss.questionId === qId
     );
@@ -66,15 +63,7 @@ function ResponseTab(props) {
     } else {
       return "not attempted";
     }
-
-    // return selectedOp[0].optionId;
-    // this.students.filter(stud => stud.Class==className);
   }
-
-  // function getOptionTextById(optionId, questionId, i){
-  // const finalOption = questions[i].options.find(oo => oo._id === optionId);
-  // return finalOption.optionText
-  // }
 
   return (
     <div>
@@ -96,14 +85,6 @@ function ResponseTab(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {/* <TableRow>
-                      <TableCell component="th" scope="row">
-                        aanounfdv
-                      </TableCell>
-                      <TableCell align="right">2</TableCell>
-                      <TableCell align="right">no</TableCell>
-                      <TableCell align="right">yes</TableCell>
-                    </TableRow> */}
               {responseData &&
                 responseData.length &&
                 responseData.map((rs, j) => (
@@ -125,4 +106,5 @@ function ResponseTab(props) {
     </div>
   );
 }
+
 export default ResponseTab;

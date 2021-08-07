@@ -44,27 +44,6 @@ function Login(props) {
     } else {
       history.push(from.pathname);
     }
-    // console.log(response);
-    // authService.loginWithGoogle(response).then(
-    //   () => {
-    //     console.log(from.pathname);
-
-    //     if (from.pathname === "/login") {
-    //       history.push("/");
-    //     } else {
-    //       history.push(from.pathname);
-    //     }
-    //   },
-    //   (error) => {
-    //     const resMessage =
-    //       (error.response &&
-    //         error.response.data &&
-    //         error.response.data.message) ||
-    //       error.message ||
-    //       error.toString();
-    //     console.log(resMessage);
-    //   }
-    // );
   };
 
   const logout = (response) => {
@@ -130,5 +109,3 @@ const mapStateToDispatch = {
 };
 
 export default connect(mapStateToProps, mapStateToDispatch)(Login);
-
-// export default Login;

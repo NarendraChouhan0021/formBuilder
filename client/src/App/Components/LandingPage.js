@@ -83,8 +83,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const cards = [];
-
 export default function LangingPage() {
   const classes = useStyles();
   const history = useHistory();

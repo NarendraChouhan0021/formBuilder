@@ -52,9 +52,5 @@ app.get("/", async (req, res) => {
 app.use("/api", router);
 
 app.listen(5000, () => {
-  console.log(
-    "\u{1F525}\u{1F680} app listen on port",
-    5000,
-    "\u{1F525}\u{1F680}"
-  );
+  console.log("app listen on port", 5000);
 });

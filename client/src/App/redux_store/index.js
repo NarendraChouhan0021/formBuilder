@@ -8,13 +8,7 @@ import { routerMiddleware } from "connected-react-router";
 
 const persistConfig = {
   key: "root",
-  blacklist: [
-    "ResidenDetails",
-    "CurrentPermitDatils",
-    "DashBoardDatils",
-    "APIResponseDatils",
-    "router",
-  ],
+  blacklist: ["router"],
   storage,
 };
 

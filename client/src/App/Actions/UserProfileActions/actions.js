@@ -7,7 +7,6 @@ export const loginWithGoogle = () => async (dispatch) => {
   const userObj = {
     name: `narendra${Math.random()}`,
     email: `narendra${Math.random()}@gmail.com`,
-    // image: res.profileObj.imageUrl
   };
 
   const { data } = await axios.post(API_URL + "login", userObj);

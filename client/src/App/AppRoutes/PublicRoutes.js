@@ -3,7 +3,7 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import Home from "../Components/Home";
 import EditForm from "../Components/Form/EditForm";
 import Login from "../Components/Login";
-import PrivateRoute from "../Components/util/PrivateRoute";
+import PrivateRoute from "./PrivateRoute";
 import UserView from "../Components/Responding/UserView";
 
 const PublicRoutes = (props) => {

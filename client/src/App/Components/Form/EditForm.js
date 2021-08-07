@@ -214,12 +214,6 @@ function EditForm(props) {
                     </Grid>
                   </Grid>
                 </Paper>
-                {/* <div style={{padding: '7px', display: 'flex'}}>
-                  <Typography variant="body1">{window.location.origin + "/s/" + formDeatils._id}</Typography>
-                  <IconButton onClick={() =>  navigator.clipboard.writeText(window.location.origin + "/s/" + formDeatils._id)}  >
-                    <MoreIcon />
-                  </IconButton>
-                  </div> */}
 
                 <DialogContentText id="alert-dialog-description"></DialogContentText>
               </DialogContent>
@@ -268,8 +262,6 @@ function EditForm(props) {
     </div>
   );
 }
-
-// export default EditForm;
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
